@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALCULADORA DE NOTAS - SAP/IFFar</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #1a1a1a; color: #ddd; }
+        header { text-align: center; margin-bottom: 30px; background-color: #2c2c2c; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .logo { display: block; margin: 0 auto 15px auto; width: 315px; height: 117px; }
+        h1 { color: rgb(53, 163, 66); margin: 0; font-size: 28px; }
+        .container { background-color: #2c2c2c; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); color: #ddd; }
+        .exame-container { background-color: #2c2c2c; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); color: #ddd; margin-top: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #ddd; }
+        input { width: 110px; max-width: 100%; padding: 8px 10px; margin-bottom: 10px; border: 2px solid #555; border-radius: 6px; font-size: 18px; background-color: #3c3c3c; color: #fff; box-sizing: border-box; text-align: center; }
+        input:disabled { background-color: #555; color: #888; cursor: not-allowed; }
+        .input-group { display: flex; flex-direction: column; align-items: flex-start; }
+        label { white-space: normal; word-break: break-word; max-width: 100%; }
+        @media (max-width: 600px) {
+            input { width: 100px; font-size: 16px; }
+        }
+        #resultado { margin-top: 35px; padding: 30px; border-radius: 10px; text-align: center; background-color: #252525; }
+        #resultado-exame { margin-top: 20px; padding: 30px; border-radius: 10px; text-align: center; background-color: #252525; }
+        .aprovado, .exame, .reprovado, .nota-exame, .aprovado-exame, .reprovado-exame { font-size: 22px; padding: 18px; border-radius: 8px; margin: 15px auto; max-width: 600px; }
+        .aprovado { background-color: #1e3a2f; color: #2ecc71; border: 2px solid #2ecc71; }
+        .exame { background-color: #3a2a2a; color: #e74c3c; border: 2px solid #e74c3c; }
+        .reprovado { background-color: #ffde21; color: #ff2c2c; border: 2px solid #e67e22; font-weight: bold; }
+        .nota-exame { background-color: #2c2c2c; color: #5dade2; border: 2px solid #5dade2; }
+        .aprovado-exame { background-color: #1e3a2f; color: #2ecc71; border: 2px solid #2ecc71; }
+        .reprovado-exame { background-color: #3a2a2a; color: #e74c3c; border: 2px solid #e74c3c; }
+        .nota-exame-valor { font-size: 35px; font-weight: bold; color: #ffde21; }
+        .nota-final-valor { font-size: 35px; font-weight: bold; color: #ffffff; }
+        .media-final-valor { font-size: 35px; font-weight: bold; color: #ffde21; }
+        .info-text { color: #5dade2; font-size: 14px; text-align: center; margin-top: 10px; font-style: italic; }
+        .aviso { background-color: #3a2a2a; color: #e74c3c; border: 2px solid #e74c3c; padding: 15px; border-radius: 8px; margin: 15px auto; max-width: 600px; font-size: 16px; }
+        .nota-minima-info { background-color: #1a3a2f; color: #2ecc71; border: 2px solid #2ecc71; padding: 12px; border-radius: 6px; margin-top: 8px; margin-bottom: 20px; font-size: 16px; font-weight: bold; text-align: center; }
+        .nota-minima-info span { font-size: 28px; color: #ffde21; }
+        .nota-minima-impossivel { background-color: #3a2a2a; color: #e74c3c; border: 2px solid #e74c3c; padding: 12px; border-radius: 6px; margin-top: 8px; margin-bottom: 20px; font-size: 16px; font-weight: bold; text-align: center; }
+        footer { margin-top: 50px; text-align: center; font-size: 14px; color: #aaa; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <header>
+        <img src="data:image/jpeg;base64,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" alt="Logo IF Farroupilha SAP" class="logo" width="315" height="117">
+        <h1>CALCULADORA DE NOTAS - SAP/IFFar</h1>
+    </header>
+
+    <div class="container">
+        <h2>Calculadora de Média Anual e Exame [Cursos Integrados]</h2>
+        <p style="color: #5dade2; font-size: 12px; text-align: center; margin-bottom: 30px;"> _  </p>
+
+        <div class="input-group" style="margin-bottom: 15px;">
+            <label for="nota1">Insira a nota do 1º semestre (peso 0,4)</label>
+            <input type="text" id="nota1" inputmode="decimal" placeholder="Ex: 6,6 ou 66" maxlength="4" oninput="validarNota(this); calcularNotaMinima2Sem(); tentarCalcularNotas()">
+        </div>
+
+        <div id="notaMinimaInfo" style="margin-bottom: 20px;"></div>
+
+        <div class="input-group" style="margin-bottom: 15px;">
+            <label for="nota2">Insira a nota do 2º semestre (peso 0,6)</label>
+            <input type="text" id="nota2" inputmode="decimal" placeholder="Ex: 6,9 ou 69" maxlength="4" oninput="validarNota(this); tentarCalcularNotas()">
+        </div>
+
+        <div id="resultado"></div>
+    </div>
+
+    <div class="exame-container">
+        <h2 style="text-align: center; color: #5dade2;">Cálculo da Média Final após o Exame</h2>
+        <p class="info-text">Preencha as notas do 1º e 2º semestre acima. Quando estiver em exame, o campo abaixo será liberado automaticamente.</p>
+
+        <div class="input-group" style="max-width: 300px; margin: 0 auto; align-items: center;">
+            <label for="notaExame">Insira a nota que você tirou no EXAME</label>
+            <input type="text" id="notaExame" inputmode="decimal" placeholder="Ex: 6,5 ou 65" maxlength="4" oninput="validarNota(this); tentarCalcularMediaFinalExame()" disabled>
+        </div>
+
+        <div id="resultado-exame"></div>
+    </div>
+
+    <footer>
+        <p><strong> Calculadora de Notas - SAP / IFFar - Versão 12 de 18/08/2026</strong></p>
+        <p><strong>Criado por:</strong> ROBERTO BASÍLIO LEAL - Lic. em História / Mestre em Educação nas Ciências </p>
+        <p> Servidor Público Federal lotado no Instituto Federal Farroupilha - campus Panambi-RS.</p>
+        <p>Contato: <a href="mailto:roberto.leal@iffar.edu.br" style="color:#5dade2;">roberto.leal@iffar.edu.br</a></p>
+        <p></p>
+        <p>© Direitos Reservados. 
+             Pode ser usado livremente por instituições de ensino que tenham a fórmula de média anual (ou semestral): Média 7,0 e 1º semestre = peso 4 / 2º semestre peso 6. Média após exame = 5,0.</p>
+    </footer>
+
+    <script>
+        // Variável global para armazenar a Nota Final Anual calculada
+        let notaFinalAnualGlobal = null;
+
+        function validarNota(input) {
+            let valor = input.value;
+
+            // Remove tudo exceto números
+            let apenasNumeros = valor.replace(/[^0-9]/g, '');
+
+            // Se estiver vazio, limpa
+            if (apenasNumeros.length === 0) {
+                input.value = '';
+                return;
+            }
+
+            // Se tiver 2 ou mais dígitos sem separador, insere vírgula automática
+            if (apenasNumeros.length >= 2) {
+                let parteInteira = apenasNumeros.charAt(0);
+                let parteDecimal = apenasNumeros.charAt(1);
+                input.value = parteInteira + ',' + parteDecimal;
+            } else {
+                input.value = apenasNumeros;
+            }
+        }
+
+        function parseNota(str) {
+            if (!str) return null;
+            let normalized = str.replace(',', '.');
+            let num = parseFloat(normalized);
+            if (str.length === 2 && !normalized.includes('.') && !isNaN(num) && num <= 99) {
+                return num / 10;
+            }
+            if (isNaN(num)) return null;
+            return num;
+        }
+
+        function calcularNotaMinima2Sem() {
+            let input1Str = document.getElementById('nota1').value.trim();
+            let nota1 = parseNota(input1Str);
+            let infoDiv = document.getElementById('notaMinimaInfo');
+
+            if (nota1 === null || nota1 < 0 || nota1 > 9.9) {
+                infoDiv.innerHTML = '';
+                return;
+            }
+
+            // Fórmula: (7.0 - nota1 * 0.4) / 0.6
+            let notaMinima = (7.0 - nota1 * 0.4) / 0.6;
+
+            if (notaMinima > 9.9) {
+                infoDiv.innerHTML = `<div class="nota-minima-impossivel">⚠️ Mesmo com nota máxima (9,9) no 2º semestre, não é possível atingir média 7,0.<br>Você já está em exame ou reprovado.</div>`;
+            } else if (notaMinima <= 0) {
+                infoDiv.innerHTML = `<div class="nota-minima-info">✅ Com esta nota no 1º semestre, qualquer nota no 2º semestre o aprova!</div>`;
+            } else {
+                let notaMinimaArredondada = Math.ceil(notaMinima * 10) / 10;
+                let notaMinimaDisplay = notaMinimaArredondada.toFixed(1).replace('.', ',');
+                infoDiv.innerHTML = `<div class="nota-minima-info">Nota mínima necessária no 2º semestre para ser aprovado: <span>${notaMinimaDisplay}</span></div>`;
+            }
+        }
+
+        function tentarCalcularNotas() {
+            let input1Str = document.getElementById('nota1').value.trim();
+            let input2Str = document.getElementById('nota2').value.trim();
+
+            let nota1 = parseNota(input1Str);
+            let nota2 = parseNota(input2Str);
+
+            // Só calcula se ambas as notas estiverem preenchidas e válidas
+            if (nota1 === null || nota2 === null || nota1 < 0 || nota1 > 9.9 || nota2 < 0 || nota2 > 9.9) {
+                document.getElementById('resultado').innerHTML = '';
+                notaFinalAnualGlobal = null;
+                document.getElementById('notaExame').disabled = true;
+                document.getElementById('notaExame').value = '';
+                document.getElementById('resultado-exame').innerHTML = '';
+                return;
+            }
+
+            calcularNotas();
+        }
+
+        function calcularNotas() {
+            let input1Str = document.getElementById('nota1').value.trim();
+            let input2Str = document.getElementById('nota2').value.trim();
+
+            let nota1 = parseNota(input1Str);
+            let nota2 = parseNota(input2Str);
+
+            if (nota1 === null || nota2 === null || nota1 < 0 || nota1 > 9.9 || nota2 < 0 || nota2 > 9.9) {
+                document.getElementById('resultado').innerHTML = '';
+                notaFinalAnualGlobal = null;
+                document.getElementById('notaExame').disabled = true;
+                document.getElementById('notaExame').value = '';
+                document.getElementById('resultado-exame').innerHTML = '';
+                return;
+            }
+
+            let notaFinal = (nota1 * 0.4 + nota2 * 0.6);
+            let notaFinalDisplay = notaFinal.toFixed(2).replace('.', ',');
+
+            notaFinalAnualGlobal = notaFinal;
+
+            let html = `<h3>Nota Final Anual: <span class="nota-final-valor">${notaFinalDisplay}</span></h3>`;
+
+            let nfs = notaFinal;
+            if (nfs >= 7.0) {
+                html += `<div class="aprovado">✅ APROVADO</div>`;
+                document.getElementById('notaExame').disabled = true;
+                document.getElementById('notaExame').value = '';
+                document.getElementById('resultado-exame').innerHTML = '';
+            } else if (nfs < 1.7) {
+                html += `<div class="reprovado">❌ VOCÊ ESTÁ REPROVADO SEM DIREITO A EXAME<br>(nota inferior a 1,7)</div>`;
+                document.getElementById('notaExame').disabled = true;
+                document.getElementById('notaExame').value = '';
+                document.getElementById('resultado-exame').innerHTML = '';
+            } else {
+                html += `<div class="exame">⚠️ VOCÊ ESTÁ EM EXAME</div>`;
+                let notaExameMin = (5.0 - nfs * 0.6) / 0.4;
+                notaExameMin = Math.max(0, Math.ceil(notaExameMin * 10) / 10);
+                html += `<div class="nota-exame"><strong>Nota necessária no Exame Final:</strong> <span class="nota-exame-valor">${notaExameMin.toFixed(1).replace('.', ',')}</span><br><small>(para atingir a média mínima de 5,0 após o exame)</small></div>`;
+                document.getElementById('notaExame').disabled = false;
+            }
+
+            document.getElementById('resultado').innerHTML = html;
+        }
+
+        function tentarCalcularMediaFinalExame() {
+            if (notaFinalAnualGlobal === null) {
+                document.getElementById('resultado-exame').innerHTML = '';
+                return;
+            }
+
+            let notaExameStr = document.getElementById('notaExame').value.trim();
+            let notaExame = parseNota(notaExameStr);
+
+            if (notaExame === null || notaExame < 0 || notaExame > 9.9) {
+                document.getElementById('resultado-exame').innerHTML = '';
+                return;
+            }
+
+            calcularMediaFinalExame();
+        }
+
+        function calcularMediaFinalExame() {
+            if (notaFinalAnualGlobal === null) {
+                document.getElementById('resultado-exame').innerHTML = `
+                    <div class="aviso">
+                        ⚠️ <strong>Atenção!</strong><br><br>
+                        Você deve inserir suas notas do 1º e 2º semestre primeiro.<br><br>
+                        Quando o resultado indicar "EM EXAME", o campo de nota do exame será liberado automaticamente.
+                    </div>
+                `;
+                return;
+            }
+
+            let notaExameStr = document.getElementById('notaExame').value.trim();
+            let notaExame = parseNota(notaExameStr);
+
+            if (notaExame === null || notaExame < 0 || notaExame > 9.9) {
+                document.getElementById('resultado-exame').innerHTML = '';
+                return;
+            }
+
+            let mediaFinalPosExame = (notaFinalAnualGlobal * 0.6) + (notaExame * 0.4);
+            let mediaFinalDisplay = mediaFinalPosExame.toFixed(2).replace('.', ',');
+            let notaFinalAnualDisplay = notaFinalAnualGlobal.toFixed(2).replace('.', ',');
+            let notaExameDisplay = notaExame.toFixed(1).replace('.', ',');
+
+            let html = `<h3 style="color: #5dade2;">Cálculo da Média Final após Exame</h3>`;
+            html += `<div style="color: #aaa; font-size: 16px; margin-bottom: 15px;">`;
+            html += `Nota Final Anual: <strong>${notaFinalAnualDisplay}</strong> (peso 0,6)<br>`;
+            html += `Nota do Exame: <strong>${notaExameDisplay}</strong> (peso 0,4)`;
+            html += `</div>`;
+            html += `<div style="font-size: 20px; margin: 15px 0;">Média Final após Exame: <span class="media-final-valor">${mediaFinalDisplay}</span></div>`;
+
+            if (mediaFinalPosExame >= 5.0) {
+                html += `<div class="aprovado-exame">✅ APROVADO APÓS EXAME<br><small>Média final de ${mediaFinalDisplay} atingiu o mínimo de 5,0</small></div>`;
+            } else {
+                html += `<div class="reprovado-exame">❌ REPROVADO<br><small>Média final de ${mediaFinalDisplay} não atingiu o mínimo de 5,0</small></div>`;
+            }
+
+            document.getElementById('resultado-exame').innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const nota2 = document.getElementById('nota2');
+            nota2.addEventListener('keypress', e => { if (e.key === 'Enter') calcularNotas(); });
+
+            const nota1 = document.getElementById('nota1');
+            nota1.addEventListener('keypress', e => { if (e.key === 'Enter') nota2.focus(); });
+
+            const notaExame = document.getElementById('notaExame');
+            notaExame.addEventListener('keypress', e => { if (e.key === 'Enter') calcularMediaFinalExame(); });
+        });
+    </script>
+</body>
+</html>
