@@ -36,6 +36,39 @@
         .nota-minima-info { background-color: #1a3a2f; color: #2ecc71; border: 2px solid #2ecc71; padding: 12px; border-radius: 6px; margin-top: 8px; margin-bottom: 20px; font-size: 16px; font-weight: bold; text-align: center; }
         .nota-minima-info span { font-size: 28px; color: #ffde21; }
         .nota-minima-impossivel { background-color: #3a2a2a; color: #e74c3c; border: 2px solid #e74c3c; padding: 12px; border-radius: 6px; margin-top: 8px; margin-bottom: 20px; font-size: 16px; font-weight: bold; text-align: center; }
+        .btn-cursos-superiores {
+            display: block;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto 25px auto;
+            padding: 12px 20px;
+            background-color: #2ecc71;
+            color: #ffffff;
+            border: 3px solid #1a9c55;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-cursos-superiores:hover {
+            background-color: #27ae60;
+            transform: scale(1.02);
+        }
+        .orientacao-superiores {
+            display: none;
+            background-color: #1a3a2f;
+            color: #2ecc71;
+            border: 2px solid #2ecc71;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            font-style: italic;
+            text-align: center;
+            line-height: 1.5;
+        }
         footer { margin-top: 50px; text-align: center; font-size: 14px; color: #aaa; }
     </style>
 <base target="_blank">
@@ -47,8 +80,15 @@
     </header>
 
     <div class="container">
-        <h2>Calculadora de Média Anual e Exame [Cursos Integrados]</h2>
-        <p style="color: #5dade2; font-size: 12px; text-align: center; margin-bottom: 30px;"> _  </p>
+        <h2>Calculadora de Média Anual e Exame para Cursos Integrados e Superiores</h2>
+
+        <button type="button" class="btn-cursos-superiores" onclick="toggleOrientacaoSuperiores()">
+            CURSOS SUPERIORES, clique aqui para ver como calcular:
+        </button>
+
+        <div id="orientacaoSuperiores" class="orientacao-superiores">
+            1) Informe a sua nota final no campo do 1º semestre. 2) Repita a mesma nota no campo do 2º semestre. Assim você saberá se está aprovado ou a nota necessária no EXAME.
+        </div>
 
         <div class="input-group" style="margin-bottom: 15px;">
             <label for="nota1">Insira a nota do 1º semestre (peso 0,4)</label>
@@ -78,7 +118,7 @@
     </div>
 
     <footer>
-        <p><strong> Calculadora de Notas - SAP / IFFar - Versão 12 de 18/08/2026</strong></p>
+        <p><strong> Calculadora de Notas - SAP / IFFar - Versão 13 de 21/08/2026</strong></p>
         <p><strong>Criado por:</strong> ROBERTO BASÍLIO LEAL - Lic. em História / Mestre em Educação nas Ciências </p>
         <p> Servidor Público Federal lotado no Instituto Federal Farroupilha - campus Panambi-RS.</p>
         <p>Contato: <a href="mailto:roberto.leal@iffar.edu.br" style="color:#5dade2;">roberto.leal@iffar.edu.br</a></p>
@@ -269,6 +309,15 @@
             }
 
             document.getElementById('resultado-exame').innerHTML = html;
+        }
+
+        function toggleOrientacaoSuperiores() {
+            const box = document.getElementById('orientacaoSuperiores');
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+            } else {
+                box.style.display = 'block';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
