@@ -10,6 +10,12 @@
     <meta name="keywords" content="calculadora, nota, notas, média, exame, IFFar, Instituto Federal, Farroupilha, alunos, docentes, professores, SAP, apoio, pedagógico, grátis, gratuita, free">
     <meta name="author" content="Roberto Basílio Leal">
 
+    <!-- para app PWA Android/IOs -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#35a342">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <!-- tags de URL -->
     <link rel="canonical" href="https://robertobleal.github.io/calculadora-notas-SAP-IFFar/">
     <meta property="og:url" content="https://robertobleal.github.io/calculadora-notas-SAP-IFFar/">
@@ -347,5 +353,15 @@
             notaExame.addEventListener('keypress', e => { if (e.key === 'Enter') calcularMediaFinalExame(); });
         });
     </script>
+
+    <!-- script para app PWA -->
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service Worker registrado'))
+      .catch((err) => console.log('Erro no SW:', err));
+  }
+</script>
+    
 </body>
 </html>
